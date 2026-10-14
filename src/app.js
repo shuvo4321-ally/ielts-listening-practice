@@ -354,7 +354,7 @@ function bindPlayer(id, lines, o) {
   function idle() {
     root.dataset.state = 'idle'; btn.disabled = false; txt.textContent = o.label;
     meta.innerHTML = exam ? 'Exam mode: this recording plays <b>once</b>. Read the questions first.' :
-      'Replay as often as you like. Speed ' + String(S.settings.rate || 1) + '× (change it under Voice).';
+      'Replay as often as you like. Speed ' + String(S.settings.rate || 1) + '× (change it under Voice & speed at the top).';
   }
   function played() {
     root.dataset.state = 'played'; btn.disabled = true; txt.textContent = 'Played'; fill.style.width = '100%';
@@ -413,21 +413,21 @@ document.addEventListener('click', function (e) {
 /* ================================================================ router */
 var VIEW = $('#view');
 function patTitle(id) { for (var i = 0; i < DATA.PATTERNS.length; i++) if (DATA.PATTERNS[i].id === id) return DATA.PATTERNS[i].title; return ''; }
+/* One continuous page: every part is rendered once, one after another, and links scroll to it. */
+var SECTIONS = ['start', 'technique', 'test', 'patterns', 'toolkit'];
+function renderAll() {
+  VIEW.innerHTML = SECTIONS.map(function (s) { return '<div id="sec-' + s + '"></div>'; }).join('');
+  viewStart(); viewTechnique(); viewTest(); viewPatterns();
+  $('#sec-toolkit').innerHTML = $('#tpl-toolkit').innerHTML;
+}
+function stopAudio() { TTS.stop(); activeReset = null; }
 function go(name, to) {
-  TTS.stop(); activeReset = null;
-  var view = name || 'start', target = to;
+  var view = name || 'start', target = to || 'sec-' + view;
   if (/^p\d+$/.test(view)) { target = 'pat-' + view; view = 'patterns'; }
-  try { history.replaceState(null, '', '#' + (target && /^pat-/.test(target) ? target.slice(4) : view)); } catch (e) {}
-  $$('.tabs a').forEach(function (a) { var on = a.dataset.go === view; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  QIDX = {};
-  if (view === 'technique') viewTechnique();
-  else if (view === 'test') viewTest();
-  else if (view === 'patterns') viewPatterns();
-  else if (view === 'toolkit') VIEW.innerHTML = $('#tpl-toolkit').innerHTML;
-  else { view = 'start'; viewStart(); }
-  var el = target && document.getElementById(target);
-  if (el) setTimeout(function () { el.scrollIntoView({ block: 'start' }); }, 30);
-  else window.scrollTo(0, 0);
+  try { history.replaceState(null, '', '#' + (/^pat-/.test(target) ? target.slice(4) : view)); } catch (e) {}
+  var el = document.getElementById(target);
+  if (target === 'sec-start' || !el) window.scrollTo(0, 0);
+  else setTimeout(function () { el.scrollIntoView({ block: 'start' }); }, 30);
 }
 
 /* ================================================================ progress helpers */
@@ -440,6 +440,7 @@ function markTocDone(id) {
   var p = null; DATA.PATTERNS.forEach(function (x) { if (x.id === id) p = x; });
   if (!p || !patDone(p)) return;
   var b = $('.minitoc button[data-to="pat-' + id + '"]'); if (b) b.classList.add('done');
+  var t = $('.toc button[data-to="pat-' + id + '"] .st'); if (t) t.textContent = '✓ done';
 }
 function testScore() {
   var got = 0, per = {};
@@ -465,15 +466,23 @@ function viewStart() {
     }).join('');
   }).join('');
   var ts = S.test.submitted ? testScore() : null;
-  VIEW.innerHTML = '<div class="sheetpage"><div class="cover"><div class="bar"></div><div class="tag">ACADEMIC &amp; GENERAL TRAINING · FROM BASICS TO BAND 9</div>' +
+  $('#sec-start').innerHTML = '<div class="sheetpage"><div class="cover"><div class="bar"></div><div class="tag">ACADEMIC &amp; GENERAL TRAINING · FROM BASICS TO BAND 9</div>' +
     '<h1>IELTS Listening<br>Pattern Walkthrough</h1><div class="sub">A complete test, 24 patterns, and every answer explained, with the recordings read aloud.</div>' +
     '<ul><li>This is a walkthrough, not just a mock test. Every answer sits <b>directly under its question</b>, folded until you tap it.</li>' +
     '<li>Each pattern gives you the technique, the recording, the transcript with the important parts highlighted, what you should take from it, then the questions with the answer and reason underneath.</li>' +
-    '<li><b>Part 1</b> is the listening technique. <b>Part 2</b> is a complete test that plays once, like the exam. <b>Part 3</b> is the 24 patterns. <b>Part 4</b> is the toolkit.</li>' +
+    '<li><b>Part 1</b> is the listening technique. <b>Part 2</b> is a complete test that plays once, like the exam. <b>Part 3</b> is the 24 patterns. <b>Part 4</b> is the toolkit. It is all one page: scroll through it like the book, or jump from the Contents below.</li>' +
     '<li>All recordings are original and are read aloud by your browser\'s own voices. Your answers are saved in this browser only.</li></ul></div>' +
     '<div class="audiocheck"><div class="ac-t"><b>Check your audio first.</b> <span class="ac-v" id="st-voice-name">Loading voices…</span></div>' +
-    '<button type="button" class="ghost sm" id="st-voice-test">Play a test sentence</button></div>' +
-    '<div class="toc"><h2>Contents</h2>' +
+    '<button type="button" class="ghost sm" id="st-voice-test">Play a test sentence</button>' +
+    '<button type="button" class="ghost sm" id="voicebtn" aria-expanded="false" aria-controls="voicepanel">Voice &amp; speed</button></div>' +
+    '<div id="voicepanel" hidden><div class="vp">' +
+    '<div class="vrow"><label for="voicesel">Voice</label><select id="voicesel"><option value="">Automatic (best match)</option></select></div>' +
+    '<div class="vrow"><label for="ratesel">Practice speed</label><select id="ratesel"><option value="0.8">0.8× slower</option><option value="0.9">0.9×</option>' +
+    '<option value="1" selected>1× normal</option><option value="1.1">1.1×</option><option value="1.2">1.2× faster</option></select>' +
+    '<span class="small faint">The full test always plays at 1×.</span></div>' +
+    '<div class="vrow"><button type="button" class="ghost sm" id="voiceclose">Close</button></div>' +
+    '<p class="small faint" id="voicenote" style="margin:0"></p></div></div>' +
+    '<div class="toc" id="toc"><h2>Contents</h2>' +
     '<div class="grp">Part 1 · Listening technique</div>' +
     '<button type="button" data-go="technique"><span class="n">1.1–1.10</span><span class="t">How the test works, reading time, the five steps, prediction, signposts, letters and numbers, rewording, distractors, word limits</span><span class="st"></span></button>' +
     '<div class="grp">Part 2 · A complete listening test</div>' +
@@ -488,12 +497,13 @@ function viewStart() {
     '<button type="button" data-go="toolkit"><span class="n">4</span><span class="t">Letters, numbers, misspelled words, signposts, score to band</span><span class="st"></span></button>' +
     '</div></div>';
   $('#st-voice-test').addEventListener('click', testVoice);
+  bindVoicePanel();
   updateVoiceChip();
 }
 
 /* ================================================================ Part 1: technique */
 function viewTechnique() {
-  VIEW.innerHTML = $('#tpl-technique').innerHTML;
+  $('#sec-technique').innerHTML = $('#tpl-technique').innerHTML;
   var T = DATA.TECH;
   ['predict', 'sign', 'dict', 'lim'].forEach(function (k) { if (!S.tech[k]) S.tech[k] = {}; });
   function choiceDrill(mount, key, d) {
@@ -596,7 +606,7 @@ function viewTest() {
   });
   html += t.submitted ? '' : '<div class="actions"><button type="button" class="primary" id="markit">Mark the test</button></div><div id="markconfirm"></div>';
   html += '</div>';
-  VIEW.innerHTML = html;
+  $('#sec-test').innerHTML = html;
   parts.forEach(function (p) {
     bindPlayer('part' + p.n, p.lines, {
       mode: 'exam', label: 'Play Part ' + p.n + ' (once)', playedAlready: !!t.played[p.n],
@@ -604,14 +614,14 @@ function viewTest() {
       onReplay: function () { S.test.replayed[p.n] = true; save(); }
     });
   });
-  $$('[data-jump]').forEach(function (b) { b.addEventListener('click', function () { var el = document.getElementById(b.dataset.jump); if (el) el.scrollIntoView({ block: 'start' }); }); });
+  $$('#sec-test [data-jump]').forEach(function (b) { b.addEventListener('click', function () { var el = document.getElementById(b.dataset.jump); if (el) el.scrollIntoView({ block: 'start' }); }); });
   if (t.submitted) {
-    $$('#view details.ans').forEach(function (d) { var q = QIDX[d.dataset.ns + '|' + d.dataset.qk]; if (q) setBadge(d, q, 'T'); });
-    $$('#view .exam input, #view .exam select').forEach(function (el) { el.disabled = true; });
+    $$('#sec-test details.ans').forEach(function (d) { var q = QIDX[d.dataset.ns + '|' + d.dataset.qk]; if (q) setBadge(d, q, 'T'); });
+    $$('#sec-test .exam input, #sec-test .exam select').forEach(function (el) { el.disabled = true; });
     var rt = $('#retake');
     if (rt) rt.addEventListener('click', function () {
       $('#retake-confirm').innerHTML = ' Clear all 40 answers? <button type="button" class="danger sm" id="retake-yes">Clear and restart</button> <button type="button" class="ghost sm" id="retake-no">Keep them</button>';
-      $('#retake-yes').addEventListener('click', function () { S.test = fresh().test; save(); go('test'); });
+      $('#retake-yes').addEventListener('click', function () { stopAudio(); S.test = fresh().test; save(); viewTest(); viewStart(); go('test'); });
       $('#retake-no').addEventListener('click', function () { $('#retake-confirm').innerHTML = ''; });
     });
   }
@@ -621,7 +631,7 @@ function viewTest() {
     parts.forEach(function (p) { p.groups.forEach(function (g) { g.qs.forEach(function (q) { var r = mark(q, getA('T', qkey(q))); if (r.st === 'blank') blank += r.max; }); }); });
     $('#markconfirm').innerHTML = '<div class="confirm">' + (blank ? '<b>' + blank + ' answer' + (blank > 1 ? 's are' : ' is') + ' blank.</b> In the exam you would guess: a blank always scores zero. ' : 'All 40 answered. ') +
       '<button type="button" class="primary sm" id="mark-yes">Mark the test</button> <button type="button" class="ghost sm" id="mark-no">Keep going</button></div>';
-    $('#mark-yes').addEventListener('click', function () { TTS.stop(); S.test.submitted = true; save(); go('test', 'result'); });
+    $('#mark-yes').addEventListener('click', function () { stopAudio(); S.test.submitted = true; save(); viewTest(); viewStart(); go('test', 'result'); });
     $('#mark-no').addEventListener('click', function () { $('#markconfirm').innerHTML = ''; });
   });
 }
@@ -645,24 +655,28 @@ function viewPatterns() {
       return '<button type="button" data-go="patterns" data-to="pat-' + p.id + '" title="' + esc(p.title) + '"' + (patDone(p) ? ' class="done"' : '') + '>' + p.id.slice(1) + '</button>';
     }).join('');
   }).join('');
-  VIEW.innerHTML = '<div class="sheetpage"><div class="partdiv"><div class="kick">Part 3</div><h1>The 24 Patterns</h1>' +
+  $('#sec-patterns').innerHTML = '<div class="sheetpage"><div class="partdiv"><div class="kick">Part 3</div><h1>The 24 Patterns</h1>' +
     '<p>Every pattern: the technique, the recording, the transcript with the important lines marked, what you should be taking from it, then the questions with the answers folded directly underneath.</p></div>' +
     '<div class="minitoc">' + mini + '</div>' +
     DATA.PATTERNS.map(patternHTML).join('') + '</div>';
   DATA.PATTERNS.forEach(function (p) { bindPlayer('pat-' + p.id, p.lines, { mode: 'practice', label: 'Play' }); });
-  $$('[data-showall]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var id = b.dataset.showall, sec = $('#pat-' + id);
+  $('#sec-patterns').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-showall], [data-clear]'); if (!b) return;
+    if (b.dataset.showall) {
+      var id = b.dataset.showall;
       store(id); S.pat[id].all = true; save();
-      $$('details', sec).forEach(function (d) { d.open = true; });
+      $$('details', $('#pat-' + id)).forEach(function (d) { d.open = true; });
       markTocDone(id);
-    });
-  });
-  $$('[data-clear]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var id = b.dataset.clear; S.pat[id] = { ans: {}, opened: {} }; save();
-      go('patterns', 'pat-' + id);
-    });
+    } else {
+      var cid = b.dataset.clear, p = DATA.PATTERNS.filter(function (x) { return x.id === cid; })[0];
+      if (activeReset) stopAudio();
+      S.pat[cid] = { ans: {}, opened: {} }; save();
+      $('#pat-' + cid).outerHTML = patternHTML(p);
+      bindPlayer('pat-' + cid, p.lines, { mode: 'practice', label: 'Play' });
+      var mb = $('.minitoc button[data-to="pat-' + cid + '"]'); if (mb) mb.classList.remove('done');
+      var tb = $('.toc button[data-to="pat-' + cid + '"] .st'); if (tb) tb.textContent = '';
+      go('patterns', 'pat-' + cid);
+    }
   });
 }
 
@@ -679,14 +693,22 @@ function renderVoicePanel() {
 }
 function updateVoiceChip() { var c = $('#st-voice-name'); if (c) c.textContent = !TTS.ok ? 'Not available in this browser' : (currentVoiceName() || 'Loading voices…'); }
 function testVoice() { TTS.play([{ s: 'N', t: 'This is how the recordings will sound. The number is oh seven nine four six. The name is spelled T, H, O, R, N, L, E, Y.' }], { rate: S.settings.rate || 1 }); }
-$('#voicebtn').addEventListener('click', function () { var p = $('#voicepanel'), open = p.hidden; p.hidden = !open; this.setAttribute('aria-expanded', String(open)); if (open) renderVoicePanel(); });
-$('#voicesel').addEventListener('change', function () { S.settings.voice = this.value; save(); updateVoiceChip(); });
-$('#ratesel').addEventListener('change', function () { S.settings.rate = parseFloat(this.value) || 1; save(); });
-$('#voicetest').addEventListener('click', testVoice);
-$('#voiceclose').addEventListener('click', function () { $('#voicepanel').hidden = true; $('#voicebtn').setAttribute('aria-expanded', 'false'); });
+function bindVoicePanel() {
+  $('#voicebtn').addEventListener('click', function () { var p = $('#voicepanel'), open = p.hidden; p.hidden = !open; this.setAttribute('aria-expanded', String(open)); if (open) renderVoicePanel(); });
+  $('#voicesel').addEventListener('change', function () { S.settings.voice = this.value; save(); updateVoiceChip(); });
+  $('#ratesel').addEventListener('change', function () {
+    S.settings.rate = parseFloat(this.value) || 1; save();
+    $$('.player[data-state="idle"] .pmeta').forEach(function (m) { if (!m.closest('.exam')) m.textContent = 'Replay as often as you like. Speed ' + String(S.settings.rate) + '× (change it under Voice & speed at the top).'; });
+  });
+  $('#voiceclose').addEventListener('click', function () { $('#voicepanel').hidden = true; $('#voicebtn').setAttribute('aria-expanded', 'false'); });
+}
 
 /* ================================================================ boot */
+renderAll();
+var totop = $('#totop');
+totop.addEventListener('click', function () { go('start', 'toc'); });
+window.addEventListener('scroll', function () { totop.hidden = window.scrollY < 900; }, { passive: true });
 var h0 = (location.hash || '').replace('#', '');
 if (/^p\d+$/.test(h0)) go(h0);
-else go(/^(start|technique|test|patterns|toolkit)$/.test(h0) ? h0 : 'start');
+else if (/^(technique|test|patterns|toolkit)$/.test(h0)) go(h0);
 })();

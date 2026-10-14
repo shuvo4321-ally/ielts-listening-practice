@@ -6,7 +6,9 @@ An interactive IELTS **Listening** practice page that reads every recording alou
 
 ## What's inside
 
-| Tab | What it is |
+It is one continuous page laid out like the Reading Pattern Walkthrough PDF, in four parts. The Contents on the cover jumps to any part or pattern.
+
+| Part | What it is |
 |---|---|
 | **1 Technique** | Ten short lessons with drills: predicting the answer, signpost words, spelling and number dictation, spotting distractors, and word limits. |
 | **2 Full test** | One complete 40-question test in four parts, laid out like the real exam: form, notes, map, multiple choice, matching and table. Press "Mark the test" to see your score, an indicative band and which questions to review. |
@@ -15,7 +17,7 @@ An interactive IELTS **Listening** practice page that reads every recording alou
 
 ## Using it
 
-- Play a recording with ▶. Use the **Voice** panel to choose a voice and a practice speed (0.8× to 1.2×). The full test always plays at 1×.
+- Play a recording with ▶. Use **Voice & speed** on the cover to choose a voice and a practice speed (0.8× to 1.2×). The full test always plays at 1×.
 - Answers stay folded until you tap them.
 - Your answers are saved in this browser only. Nothing is sent anywhere.
 - The voices come from your device. Chrome and Edge on desktop sound best; on phones the voices depend on the system.
