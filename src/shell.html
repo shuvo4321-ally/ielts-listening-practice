@@ -1,0 +1,477 @@
+<title>IELTS Listening Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a book that plays sound. One reading column like the walkthrough PDFs (serif text, colour-coded
+   boxes: technique blue, recording gold, "what you should get" green, "same pattern" purple), with answers
+   folded directly under each question and a sticky part bar on top. */
+:root {
+  --bg: #F4F5F7; --page: #FFFFFF; --ink: #15202B; --muted: #4F5D6B; --faint: #8693A0; --line: #DCE2E8;
+  --navy: #14365A; --navy-ink: #FFFFFF;
+  --tech: #EEF3F8; --tech-edge: #2C6E9B; --tech-lab: #1F5D87;
+  --rec: #FCFAF4; --rec-edge: #C9A227; --rec-lab: #8E7019; --rec-line: #EADFC0;
+  --get: #F1F7F1; --get-edge: #2E7D32; --get-lab: #256428;
+  --same: #F5F2FA; --same-edge: #5B4B9A; --same-lab: #4A3D82;
+  --qa: #F4F7FA; --ok: #2E7D32; --bad: #B23A2E; --warn: #9A6A0E; --ok-soft: #E6F3E7; --bad-soft: #FBE9E7; --warn-soft: #FBF2DE;
+  --hA: #FFF0A8; --hP: #D3ECD3; --hT: #F9CFCA;
+  --m-ground: #EDF1E5; --m-path: #CDC4B3; --m-bld: #FFFFFF; --m-water: #C6DCEE; --m-yard: #E2DACB;
+  --f-text: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-ui: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1318; --page: #141C24; --ink: #E5ECF2; --muted: #A2B0BC; --faint: #6F7E8B; --line: #26313B;
+    --navy: #9FB8EA; --navy-ink: #0D1318;
+    --tech: #15233A; --tech-edge: #6FA3D1; --tech-lab: #8DB8DE;
+    --rec: #201C10; --rec-edge: #C9A227; --rec-lab: #DDBE5C; --rec-line: #3B341C;
+    --get: #142719; --get-edge: #5DBB66; --get-lab: #7FCB86;
+    --same: #1E1A2E; --same-edge: #9585D6; --same-lab: #B2A5E6;
+    --qa: #18222C; --ok: #66C27A; --bad: #EE8C80; --warn: #E0B35A; --ok-soft: #15301B; --bad-soft: #3A1E1A; --warn-soft: #33290F;
+    --hA: #5E5013; --hP: #1F4426; --hT: #5B2621;
+    --m-ground: #1A241D; --m-path: #3D3A33; --m-bld: #1E2831; --m-water: #1D3346; --m-yard: #2B2924;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1318; --page: #141C24; --ink: #E5ECF2; --muted: #A2B0BC; --faint: #6F7E8B; --line: #26313B;
+  --navy: #9FB8EA; --navy-ink: #0D1318;
+  --tech: #15233A; --tech-edge: #6FA3D1; --tech-lab: #8DB8DE;
+  --rec: #201C10; --rec-edge: #C9A227; --rec-lab: #DDBE5C; --rec-line: #3B341C;
+  --get: #142719; --get-edge: #5DBB66; --get-lab: #7FCB86;
+  --same: #1E1A2E; --same-edge: #9585D6; --same-lab: #B2A5E6;
+  --qa: #18222C; --ok: #66C27A; --bad: #EE8C80; --warn: #E0B35A; --ok-soft: #15301B; --bad-soft: #3A1E1A; --warn-soft: #33290F;
+  --hA: #5E5013; --hP: #1F4426; --hT: #5B2621;
+  --m-ground: #1A241D; --m-path: #3D3A33; --m-bld: #1E2831; --m-water: #1D3346; --m-yard: #2B2924;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-text); font-size: 17px; line-height: 1.6; }
+button, select, input { font-family: var(--f-ui); }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--tech-edge); outline-offset: 2px; }
+b, strong { color: var(--navy); font-weight: 600; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.small { font-size: 14px; } .faint { color: var(--faint); }
+
+/* ---------- top bar ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--page); border-bottom: 1px solid var(--line); }
+.topin { max-width: 1000px; margin: 0 auto; padding: 9px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--f-ui); }
+.brand { font-family: var(--f-text); font-size: 20px; font-weight: 600; color: var(--navy); text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 2px; flex: 1 1 auto; flex-wrap: wrap; }
+.tabs a { color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.tabs a .n { font-family: var(--f-mono); font-size: 12px; color: var(--faint); margin-right: 4px; }
+.tabs a:hover { color: var(--ink); background: var(--bg); }
+.tabs a.on { color: var(--navy-ink); background: var(--navy); }
+.tabs a.on .n { color: var(--navy-ink); opacity: .7; }
+.vbtn { border: 1px solid var(--line); background: var(--page); color: var(--ink); border-radius: 7px; padding: 6px 11px; font-size: 13.5px; display: inline-flex; gap: 7px; align-items: center; }
+.vbtn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; }
+#voicepanel { max-width: 1000px; margin: 0 auto; padding: 0 20px 12px; font-family: var(--f-ui); }
+.vp { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 9px; font-size: 14px; }
+.vrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.vrow label { color: var(--muted); min-width: 100px; }
+.vrow select { flex: 1 1 260px; min-width: 0; max-width: 100%; }
+select, .gapish { font-size: 14px; color: var(--ink); background: var(--page); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; }
+@media (max-width: 680px) {
+  .topin { gap: 6px 10px; padding: 8px 16px; }
+  .brand { order: 1; flex: 1 1 auto; font-size: 18px; }
+  .vbtn { order: 2; }
+  .tabs { order: 3; flex: 1 1 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+}
+
+/* ---------- page ---------- */
+main { max-width: 820px; margin: 0 auto; padding-inline: 20px; padding-block: 30px 90px; outline: none; }
+.sheetpage { background: var(--page); border: 1px solid var(--line); border-radius: 4px; padding: 34px 40px 40px; }
+@media (max-width: 640px) { main { padding-inline: 10px; } .sheetpage { padding: 22px 16px 28px; } }
+h1, h2, h3 { font-family: var(--f-ui); color: var(--navy); text-wrap: balance; }
+h1 { font-size: clamp(28px, 5vw, 36px); line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.01em; }
+h2 { font-size: 21px; line-height: 1.25; margin: 34px 0 10px; }
+h3 { font-size: 16.5px; margin: 22px 0 8px; }
+p { margin: 0 0 12px; }
+ul, ol { margin: 0 0 12px; padding-left: 24px; }
+li { margin-bottom: 6px; }
+.partdiv { border-left: 4px solid var(--rec-edge); padding: 4px 0 4px 18px; margin: 0 0 26px; }
+.partdiv .kick { font-family: var(--f-mono); font-size: 12px; letter-spacing: .14em; color: var(--faint); text-transform: uppercase; }
+.partdiv h1 { margin: 4px 0 8px; }
+.partdiv p { font-style: italic; color: var(--muted); margin: 0; max-width: 62ch; }
+
+/* ---------- cover + contents ---------- */
+.cover .bar { height: 5px; width: 64px; background: var(--navy); margin: 6px 0 24px; }
+.cover .tag { display: inline-block; background: var(--navy); color: var(--navy-ink); font-family: var(--f-ui); font-size: 12px; letter-spacing: 1.2px; padding: 4px 11px; margin-bottom: 16px; }
+.cover h1 { font-size: clamp(32px, 6vw, 44px); }
+.cover .sub { font-size: 20px; font-style: italic; color: var(--muted); margin-bottom: 20px; }
+.cover ul { color: var(--muted); }
+.audiocheck { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border: 1px dashed var(--line); border-radius: 8px; padding: 12px 14px; margin: 22px 0; font-family: var(--f-ui); font-size: 14.5px; }
+.audiocheck .ac-t { flex: 1 1 240px; min-width: 0; }
+.audiocheck .ac-v { display: block; font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.toc h2 { border-bottom: 2px solid var(--navy); padding-bottom: 8px; margin-top: 30px; }
+.toc .grp { font-family: var(--f-ui); font-size: 12px; letter-spacing: 1.6px; color: var(--faint); text-transform: uppercase; margin: 18px 0 6px; padding-bottom: 5px; border-bottom: 1px solid var(--line); }
+.toc button { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 8px; width: 100%; text-align: left; border: 0; background: none; padding: 4px 0; color: var(--ink); font-family: var(--f-text); font-size: 16.5px; align-items: baseline; }
+.toc button:hover .t { color: var(--tech-edge); text-decoration: underline; }
+.toc .n { font-family: var(--f-ui); font-size: 12.5px; font-weight: 600; color: var(--rec-lab); }
+.toc .cc { color: var(--faint); font-style: italic; font-size: 15px; }
+.toc .st { font-family: var(--f-mono); font-size: 12px; color: var(--ok); }
+
+/* ---------- boxes (same roles as the PDF) ---------- */
+.box { padding: 14px 18px; margin: 16px 0; border-radius: 2px; }
+.lab { display: block; font-family: var(--f-ui); font-size: 11.5px; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+.box p:last-child, .box ol:last-child, .box ul:last-child { margin-bottom: 0; }
+.tech { background: var(--tech); border-left: 4px solid var(--tech-edge); } .tech .lab { color: var(--tech-lab); }
+.rec { background: var(--rec); border: 1px solid var(--rec-line); border-left: 4px solid var(--rec-edge); } .rec .lab { color: var(--rec-lab); }
+.get { background: var(--get); border-left: 4px solid var(--get-edge); } .get .lab { color: var(--get-lab); }
+.same { background: var(--same); border-left: 4px solid var(--same-edge); } .same .lab { color: var(--same-lab); }
+.warn { background: var(--bad-soft); border-left: 4px solid var(--bad); } .warn .lab { color: var(--bad); }
+.notice { counter-reset: nc; list-style: none; padding: 0; margin: 4px 0 0; }
+.notice li { position: relative; padding-left: 32px; margin-bottom: 9px; }
+.notice li::before { counter-increment: nc; content: counter(nc); position: absolute; left: 0; top: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--rec-edge); color: #fff; font-family: var(--f-ui); font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+
+/* ---------- tables ---------- */
+.tablewrap { overflow-x: auto; margin: 12px 0; }
+table.t { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.t th { background: var(--navy); color: var(--navy-ink); text-align: left; padding: 8px 10px; font-family: var(--f-ui); font-size: 12px; letter-spacing: .6px; text-transform: uppercase; font-weight: 600; }
+table.t td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.t td.k { font-weight: 600; color: var(--navy); font-family: var(--f-ui); font-size: 14px; }
+
+/* ---------- pattern head ---------- */
+.pat { border-top: 4px solid var(--navy); padding-top: 14px; margin-top: 56px; scroll-margin-top: 120px; }
+.pnum { display: inline-block; background: var(--navy); color: var(--navy-ink); font-family: var(--f-ui); font-size: 12px; font-weight: 600; letter-spacing: 1.3px; padding: 4px 10px; }
+.ptype { display: inline-block; font-family: var(--f-ui); font-size: 12.5px; color: var(--navy); font-weight: 600; margin-left: 12px; text-transform: uppercase; letter-spacing: .4px; }
+.ptitle { font-family: var(--f-ui); font-size: 20px; font-weight: 700; color: var(--navy); margin: 10px 0 0; line-height: 1.3; }
+.minitoc { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; font-family: var(--f-ui); }
+.minitoc .lbl2 { font-size: 12px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--faint); width: 100%; margin-top: 10px; }
+.minitoc button { border: 1px solid var(--line); background: var(--page); color: var(--ink); border-radius: 6px; padding: 4px 9px; font-family: var(--f-mono); font-size: 13px; min-width: 36px; }
+.minitoc button.done { border-color: var(--ok); color: var(--ok); }
+.minitoc button:hover { border-color: var(--tech-edge); }
+
+/* ---------- player ---------- */
+.player { display: flex; gap: 14px; align-items: center; background: var(--page); border: 1px solid var(--rec-line); border-radius: 10px; padding: 10px 12px; margin: 4px 0 10px; font-family: var(--f-ui); }
+.pbtn { display: inline-flex; align-items: center; gap: 9px; background: var(--navy); color: var(--navy-ink); border: 0; border-radius: 999px; padding: 9px 17px 9px 13px; font-weight: 600; font-size: 14.5px; white-space: nowrap; }
+.pbtn:disabled { opacity: .55; cursor: default; }
+.pico { display: inline-block; width: 0; height: 0; border-style: solid; border-width: 7px 0 7px 11px; border-color: transparent transparent transparent currentColor; }
+.player[data-state="playing"] .pico { width: 11px; height: 12px; border: 0; background: linear-gradient(90deg, currentColor 0 35%, transparent 35% 65%, currentColor 65% 100%); }
+.player[data-state="played"] .pbtn { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.pbody { flex: 1 1 auto; min-width: 0; }
+.tape { height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.tfill { height: 100%; width: 0; background: var(--rec-edge); transition: width .3s ease; }
+.pmeta { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+@media (max-width: 520px) { .player { flex-direction: column; align-items: stretch; } .pbtn { justify-content: center; } }
+
+/* ---------- folds ---------- */
+details.fold { border: 1px solid var(--line); border-radius: 8px; background: var(--page); margin: 10px 0; }
+details.fold > summary { cursor: pointer; padding: 10px 14px; font-family: var(--f-ui); font-size: 14.5px; font-weight: 600; color: var(--navy); list-style: none; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font-family: var(--f-mono); width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 4px; display: grid; place-items: center; font-size: 13px; color: var(--muted); flex: none; }
+details.fold[open] > summary::before { content: "–"; }
+details.fold > summary .hint { font-weight: 400; color: var(--faint); font-size: 13px; }
+details.fold[open] > summary { border-bottom: 1px solid var(--line); }
+details.fold.get { background: var(--get); }
+details.fold.get > summary { color: var(--get-lab); }
+.foldbody { padding: 12px 16px 14px; }
+.legend { font-family: var(--f-ui); font-size: 12.5px; color: var(--muted); margin: 0 0 8px; display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.tx p { display: grid; grid-template-columns: minmax(0, 110px) minmax(0, 1fr); gap: 12px; margin: 8px 0; }
+.tx .spk { font-family: var(--f-mono); font-size: 12px; color: var(--faint); padding-top: 4px; overflow-wrap: anywhere; }
+@media (max-width: 520px) { .tx p { grid-template-columns: 1fr; gap: 0; } }
+mark { color: var(--ink); padding: 0 2px; border-radius: 2px; }
+mark.ev { background: var(--hA); } mark.para { background: var(--hP); } mark.trap { background: var(--hT); }
+mark sup { font-family: var(--f-mono); font-size: 10px; font-weight: 600; margin-left: 2px; color: var(--muted); }
+
+/* ---------- questions ---------- */
+.group { margin: 22px 0 10px; }
+.ginstr { font-family: var(--f-ui); margin-bottom: 10px; }
+.grange { font-weight: 700; font-size: 15px; color: var(--ink); }
+.ginstr p { margin: 2px 0; font-size: 14.5px; }
+.ginstr .lim { color: var(--muted); }
+.ginstr .lim b { color: var(--ink); }
+.qsheet { border: 1.3px solid var(--ink); border-radius: 2px; padding: 14px 18px; background: var(--page); }
+.qsheet .st { font-family: var(--f-ui); font-weight: 700; text-align: center; font-size: 15px; margin-bottom: 8px; }
+.form { margin: 0; }
+.frow { display: grid; grid-template-columns: minmax(0, 40%) minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px dotted var(--line); align-items: center; }
+.frow:last-child { border-bottom: 0; }
+.frow dt { color: var(--muted); font-size: 15.5px; } .frow dd { margin: 0; min-width: 0; }
+.qsheet h4 { font-family: var(--f-ui); font-size: 13.5px; font-weight: 700; margin: 12px 0 4px; color: var(--ink); }
+.qsheet .np { margin: 4px 0; padding-left: 16px; position: relative; }
+.qsheet .np::before { content: ""; position: absolute; left: 3px; top: .72em; width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
+.gaps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.flow li { position: relative; border: 1px solid var(--ink); padding: 9px 12px; margin: 0; }
+.flow li + li::before { content: ""; position: absolute; left: 50%; top: -19px; width: 1.5px; height: 12px; background: var(--ink); }
+.flow li + li::after { content: ""; position: absolute; left: calc(50% - 5px); top: -9px; border: 5px solid transparent; border-top-color: var(--ink); }
+table.qt { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 520px; }
+table.qt th, table.qt td { border: 1px solid var(--line); padding: 8px 9px; text-align: left; vertical-align: top; }
+table.qt th { font-family: var(--f-ui); font-size: 12.5px; background: var(--qa); color: var(--ink); }
+.slot { display: inline-flex; align-items: stretch; vertical-align: middle; margin: 2px; max-width: 100%; }
+.slot .qn { font-family: var(--f-ui); font-size: 12.5px; font-weight: 700; color: var(--ink); padding: 0 5px 0 2px; display: grid; place-items: center; }
+.gap { font-family: var(--f-mono); font-size: 15px; color: var(--ink); background: transparent; border: 0; border-bottom: 1.5px solid var(--ink); padding: 2px 4px; width: 9.5em; max-width: 48vw; border-radius: 0; }
+.gap:focus { outline: none; background: var(--qa); border-bottom-color: var(--tech-edge); }
+.gap:disabled { opacity: .85; }
+.qblock { margin: 14px 0; }
+.stem { margin: 0 0 6px; }
+.stem .qn, .sel .qn { font-family: var(--f-ui); font-weight: 700; margin-right: 8px; }
+.opts { display: grid; gap: 4px; padding-left: 24px; }
+.opt { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 9px; align-items: baseline; padding: 4px 8px; border-radius: 6px; cursor: pointer; }
+.opt:hover { background: var(--qa); }
+.opt input { accent-color: var(--navy); margin: 0; transform: translateY(2px); }
+.opt .L { font-family: var(--f-ui); font-weight: 700; }
+.opt:has(input:checked) { background: var(--tech); }
+.hint2 { color: var(--bad); font-size: 13.5px; font-family: var(--f-ui); margin: 4px 0 0 24px; }
+.hint2:empty { display: none; }
+.mapwrap { border: 1px solid var(--line); padding: 8px; overflow-x: auto; background: var(--page); }
+.map { display: block; width: 100%; max-width: 620px; height: auto; margin: 0 auto; }
+.m-ground { fill: var(--m-ground); stroke: var(--line); }
+.m-path { fill: none; stroke: var(--m-path); stroke-width: 14; stroke-linecap: round; }
+.m-yard { fill: var(--m-yard); stroke: var(--m-path); }
+.m-land { fill: var(--m-bld); stroke: var(--muted); stroke-dasharray: 3 3; }
+.m-water { fill: var(--m-water); } .m-gate { fill: var(--muted); }
+.m-lab { font-family: var(--f-ui); font-size: 12.5px; fill: var(--muted); text-anchor: middle; }
+.m-pin rect { fill: var(--m-bld); stroke: var(--ink); stroke-width: 1.5; }
+.m-pin text { font-family: var(--f-mono); font-size: 14px; font-weight: 600; fill: var(--ink); text-anchor: middle; }
+.m-compass path { fill: var(--muted); } .m-compass text { font-family: var(--f-mono); font-size: 11px; fill: var(--muted); text-anchor: middle; }
+.sels { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; margin-top: 10px; }
+.sel { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px dotted var(--line); }
+.sel label { min-width: 0; } .sel select { font-family: var(--f-mono); }
+.optbox { border: 1px solid var(--ink); padding: 10px 14px; display: grid; gap: 2px; font-size: 15.5px; margin-bottom: 8px; }
+.optbox .obt { font-family: var(--f-ui); font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.optbox b { font-family: var(--f-ui); color: var(--ink); margin-right: 8px; }
+
+/* ---------- answer folds (directly under questions) ---------- */
+.afolds { display: grid; gap: 6px; margin-top: 10px; }
+details.ans { border: 1px solid var(--line); border-radius: 6px; background: var(--qa); }
+details.ans > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; padding: 7px 12px; font-family: var(--f-ui); font-size: 14px; }
+details.ans > summary::-webkit-details-marker { display: none; }
+details.ans > summary .qn { font-weight: 700; color: var(--navy); min-width: 44px; }
+details.ans > summary .peek { color: var(--tech-edge); font-weight: 600; }
+details.ans[open] > summary .peek::after { content: " ▴"; } details.ans:not([open]) > summary .peek::after { content: " ▾"; }
+details.ans > summary .res { margin-left: auto; font-family: var(--f-mono); font-size: 12px; padding: 1px 8px; border-radius: 999px; }
+.res:empty { display: none; }
+.res.r-ok { background: var(--ok-soft); color: var(--ok); } .res.r-bad { background: var(--bad-soft); color: var(--bad); } .res.r-mid { background: var(--warn-soft); color: var(--warn); }
+.abody { padding: 4px 14px 12px; border-top: 1px solid var(--line); }
+.abig { display: inline-block; background: var(--ok); color: #fff; font-family: var(--f-ui); font-size: 14px; font-weight: 700; letter-spacing: .4px; padding: 3px 11px; margin: 10px 0 6px; }
+.alsos { font-family: var(--f-ui); font-size: 12.5px; color: var(--muted); margin-left: 8px; }
+.yours { font-family: var(--f-ui); font-size: 13.5px; margin: 4px 0 6px; }
+.yours.r-ok { color: var(--ok); } .yours.r-bad { color: var(--bad); } .yours.r-mid { color: var(--warn); }
+.wt { display: block; font-family: var(--f-ui); font-size: 11px; letter-spacing: 1px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+.abody p { margin: 2px 0 6px; }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--tech-edge); font-family: var(--f-ui); font-size: 13.5px; font-weight: 600; text-align: left; }
+
+/* ---------- buttons / actions ---------- */
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 16px 0; font-family: var(--f-ui); }
+.primary { background: var(--navy); color: var(--navy-ink); border: 1px solid var(--navy); border-radius: 7px; padding: 9px 16px; font-weight: 600; font-size: 14.5px; }
+.ghost { background: var(--page); color: var(--ink); border: 1px solid var(--line); border-radius: 7px; padding: 9px 14px; font-size: 14.5px; }
+.danger { background: var(--bad); color: #fff; border: 1px solid var(--bad); border-radius: 7px; padding: 8px 14px; font-weight: 600; }
+.sm { padding: 6px 12px; font-size: 13.5px; }
+.confirm { background: var(--warn-soft); border-radius: 8px; padding: 12px 14px; font-family: var(--f-ui); font-size: 14.5px; }
+
+/* ---------- full test ---------- */
+.exam { border: 1px solid var(--faint); padding: 18px 20px; margin: 22px 0; background: var(--page); scroll-margin-top: 110px; }
+.exam .eh { font-family: var(--f-ui); font-weight: 700; font-size: 16px; margin: 0; }
+.exam .es { font-style: italic; margin: 2px 0 10px; font-size: 15.5px; }
+@media (max-width: 520px) { .exam { padding: 14px 12px; } }
+.result { border: 2px solid var(--navy); padding: 16px 18px; margin: 10px 0 20px; display: grid; gap: 12px; font-family: var(--f-ui); }
+.rscore { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.rscore .big { font-family: var(--f-mono); font-size: 44px; font-weight: 600; line-height: 1; color: var(--navy); }
+.rscore .big span { font-size: 20px; color: var(--faint); }
+.rp { display: grid; grid-template-columns: 56px minmax(0, 1fr) 46px; gap: 10px; align-items: center; font-size: 13.5px; }
+.rbar { height: 8px; background: var(--line); overflow: hidden; border-radius: 4px; } .rbar i { display: block; height: 100%; background: var(--navy); }
+.chipbtn { border: 1px solid var(--line); background: var(--page); color: var(--ink); border-radius: 999px; padding: 5px 12px; margin: 0 6px 6px 0; font-size: 13.5px; }
+.jump { display: flex; gap: 6px; flex-wrap: wrap; font-family: var(--f-ui); margin: 10px 0 4px; }
+.jump button { border: 1px solid var(--line); background: var(--page); border-radius: 6px; padding: 5px 10px; font-size: 13.5px; color: var(--ink); }
+
+/* ---------- drills ---------- */
+.drill { display: grid; gap: 8px; margin: 10px 0 8px; font-family: var(--f-ui); font-size: 15px; }
+.drow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; align-items: center; border: 1px solid var(--line); border-radius: 7px; padding: 9px 12px; background: var(--page); }
+.drow .dq { min-width: 0; }
+.drow .dfb { grid-column: 1 / -1; font-size: 14px; }
+.drow.dict { grid-template-columns: auto minmax(0, 1fr) minmax(0, 150px) auto; }
+.dfb:empty { display: none; } .dfb.ok { color: var(--ok); } .dfb.bad { color: var(--bad); } .dfb.warn { color: var(--warn); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+.segb { border: 0; background: var(--page); color: var(--muted); padding: 6px 11px; font-size: 13.5px; }
+.segb + .segb { border-left: 1px solid var(--line); }
+.segb.on { background: var(--navy); color: var(--navy-ink); }
+.mini { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--page); display: grid; place-items: center; padding: 0; color: var(--navy); }
+.words { display: flex; flex-wrap: wrap; gap: 6px; }
+.words span { font-family: var(--f-mono); font-size: 13.5px; border: 1px solid var(--line); border-radius: 5px; padding: 2px 8px; }
+@media (max-width: 560px) { .drow.dict { grid-template-columns: auto minmax(0, 1fr); } .drow.dict .gapish, .drow.dict .ghost { grid-column: 1 / -1; } }
+@media (prefers-reduced-motion: reduce) { .tfill { transition: none; } }
+</style>
+
+<header class="top">
+  <div class="topin">
+    <a class="brand" href="#start" data-go="start">IELTS Listening Lab</a>
+    <nav class="tabs" aria-label="Parts">
+      <a href="#start" data-go="start">Contents</a>
+      <a href="#technique" data-go="technique"><span class="n">1</span>Technique</a>
+      <a href="#test" data-go="test"><span class="n">2</span>Full test</a>
+      <a href="#patterns" data-go="patterns"><span class="n">3</span>Patterns</a>
+      <a href="#toolkit" data-go="toolkit"><span class="n">4</span>Toolkit</a>
+    </nav>
+    <button type="button" class="vbtn" id="voicebtn" aria-expanded="false" aria-controls="voicepanel">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/></svg>Voice
+    </button>
+  </div>
+  <div id="voicepanel" hidden>
+    <div class="vp">
+      <div class="vrow"><label for="voicesel">Voice</label><select id="voicesel"><option value="">Automatic (best match)</option></select></div>
+      <div class="vrow"><label for="ratesel">Practice speed</label>
+        <select id="ratesel"><option value="0.8">0.8× slower</option><option value="0.9">0.9×</option><option value="1" selected>1× normal</option><option value="1.1">1.1×</option><option value="1.2">1.2× faster</option></select>
+        <span class="small faint">The full test always plays at 1×.</span></div>
+      <div class="vrow"><button type="button" class="ghost sm" id="voicetest">Test the voice</button><button type="button" class="ghost sm" id="voiceclose">Close</button></div>
+      <p class="small faint" id="voicenote" style="margin:0"></p>
+    </div>
+  </div>
+</header>
+
+<main id="view" tabindex="-1"></main>
+
+<!-- ============================================================ PART 1 · TECHNIQUE -->
+<template id="tpl-technique">
+<div class="sheetpage">
+<div class="partdiv"><div class="kick">Part 1</div><h1>Listening Technique</h1>
+<p>How the test is built, what to do in the reading time, and the five steps that apply to every question. Everything in Parts 2 and 3 assumes this.</p></div>
+
+<h2>1. How the test works</h2>
+<div class="tablewrap"><table class="t">
+  <tr><th>Part</th><th>What you hear</th><th>Typical questions</th></tr>
+  <tr><td class="k">Part 1</td><td>A conversation between two people in an everyday situation: booking, enquiring, registering</td><td>Form and note completion: names, numbers, dates</td></tr>
+  <tr><td class="k">Part 2</td><td>One person on an everyday topic: a tour, a talk, an announcement</td><td>Maps and plans, multiple choice, matching, short answers</td></tr>
+  <tr><td class="k">Part 3</td><td>Up to four people discussing study: students, sometimes with a tutor</td><td>Multiple choice, matching opinions, choose TWO, flow-charts</td></tr>
+  <tr><td class="k">Part 4</td><td>One academic lecture with no break in the middle</td><td>Note, table or sentence completion, usually ten gaps in a row</td></tr>
+</table></div>
+<p><b>Forty questions, one mark each.</b> The recordings last about thirty minutes and you hear each one <b>once only</b>. On paper you then get ten minutes to transfer your answers; on computer you get two minutes to check. The test is the same for Academic and General Training, and it gets harder part by part.</p>
+
+<h2>2. The reading time before each recording</h2>
+<p>Before every section there are about thirty seconds to read the questions. This is where the marks are won. In that time:</p>
+<ol>
+<li><b>Underline the key words</b> in each question, and expect to hear them reworded.</li>
+<li><b>Predict the type of answer</b> for every gap: a number, a name, a plural noun, an adjective.</li>
+<li><b>Note the word limit.</b> ONE WORD ONLY and ONE WORD AND/OR A NUMBER are different rules.</li>
+<li><b>Look at how the questions are grouped</b>, so you know when the speaker moves from one group to the next.</li>
+</ol>
+
+<h2>3. The five steps for every question</h2>
+<div class="box tech"><span class="lab">The procedure</span>
+<ol>
+<li><b>Read and predict.</b> Decide what kind of word you are waiting for before the speaker reaches it.</li>
+<li><b>Expect rewording.</b> The question will almost never use the speaker's words. Listen for the meaning.</li>
+<li><b>Follow the signposts.</b> <i>First, next, the main reason, moving on</i> tell you which question you are on.</li>
+<li><b>Wait for the speaker to settle.</b> The first answer you hear is often corrected, rejected or overtaken.</li>
+<li><b>Check the form.</b> Spelling, plural, word limit, and no repeated printed words.</li>
+</ol></div>
+<p>Step 4 is the one that separates a 7 from a 9. Most mistakes in Listening are not mishearing; they are writing too early.</p>
+
+<h2>4. Predict the answer before you hear it</h2>
+<p>Choose the type of word each gap needs.</p>
+<div id="m-predict"></div>
+
+<h2>5. Signpost words tell you where you are</h2>
+<p>Match each signpost to its job.</p>
+<div id="m-sign"></div>
+
+<h2>6. Letters and numbers</h2>
+<p>Part 1 nearly always tests spelling and numbers. Zero is often said as <i>oh</i>, repeated digits as <i>double</i>, and the letters that sound alike are the ones you will be given. Press play, type what you hear, then check.</p>
+<div id="m-dict"></div>
+
+<h2>7. The recording never uses the question's words</h2>
+<p>This is the whole game, exactly as in Reading. The question is a reworded version of what the speaker says, and it gets reworded in a few predictable ways:</p>
+<div class="tablewrap"><table class="t">
+  <tr><th>Type</th><th>You hear</th><th>The question says</th></tr>
+  <tr><td class="k">A different word</td><td>"the session is cancelled"</td><td>the session will not take place</td></tr>
+  <tr><td class="k">An idiom</td><td>"it won't cost the earth"</td><td>it is cheap</td></tr>
+  <tr><td class="k">A description</td><td>"where we can reach you"</td><td>phone number</td></tr>
+  <tr><td class="k">The opposite, negated</td><td>"hardly anyone complained"</td><td>not a problem</td></tr>
+  <tr><td class="k">Examples become a category</td><td>"swimming, squash and tennis"</td><td>sports</td></tr>
+  <tr><td class="k">The same fact from the other end</td><td>"open until late"</td><td>closing time</td></tr>
+</table></div>
+
+<h2>8. Distractors: the first answer is often wrong</h2>
+<div class="tablewrap"><table class="t">
+  <tr><th>Shape</th><th>Example</th></tr>
+  <tr><td class="k">Correction</td><td>"Tuesday. No, sorry, Thursday."</td></tr>
+  <tr><td class="k">Rejection</td><td>"I did consider the gold membership, but…"</td></tr>
+  <tr><td class="k">Past vs now</td><td>"It used to be at eight; now it's half past."</td></tr>
+  <tr><td class="k">Expectation vs reality</td><td>"I expected her to be defensive, but she was really keen."</td></tr>
+  <tr><td class="k">Popular belief</td><td>"Many people think X. In fact…"</td></tr>
+  <tr><td class="k">The other speaker</td><td>The question asks about Nadia; Tom speaks first.</td></tr>
+</table></div>
+<p>Try one. Listen, answer, then open the answer.</p>
+<div id="m-distr"></div>
+
+<h2>9. Word limits and the answer sheet</h2>
+<p>An answer can be completely right and still score zero because of how it is written. Decide whether each answer is acceptable.</p>
+<div id="m-lim"></div>
+<div class="box warn"><span class="lab">Rules that cost marks before anyone checks your listening</span>
+<p>Spell correctly (British or American spelling are both accepted). Keep plurals as you hear them. Never repeat a word printed beside the gap. Write numbers in figures. Capitals do not matter. Never leave a blank: there is no penalty for a wrong answer.</p></div>
+
+<h2>10. How to use Part 3</h2>
+<p>Each of the 24 patterns is laid out the same way:</p>
+<div class="tablewrap"><table class="t">
+  <tr><td class="k" style="width:210px">TECHNIQUE</td><td>How to listen for this question type, in a few lines.</td></tr>
+  <tr><td class="k">THE RECORDING</td><td>Press play. The transcript is folded underneath: open it after you have listened.</td></tr>
+  <tr><td class="k">WHAT YOU SHOULD GET</td><td>Numbered notes explaining each highlight: why it matters and what it tells you.</td></tr>
+  <tr><td class="k">QUESTION → ANSWER</td><td>The question, with the answer and the reason folded directly underneath.</td></tr>
+  <tr><td class="k">SAME PATTERN NEXT TIME</td><td>The rule to carry into the real test.</td></tr>
+</table></div>
+<p class="legend"><span><mark class="ev">yellow</mark> the line that answers the question</span><span><mark class="para">green</mark> the reworded link between recording and question</span><span><mark class="trap">pink</mark> the trap</span></p>
+<div class="actions"><button type="button" class="primary" data-go="test">Next: Part 2, the full test →</button></div>
+</div>
+</template>
+
+<!-- ============================================================ TOOLKIT -->
+<template id="tpl-toolkit">
+<div class="sheetpage">
+<div class="partdiv"><div class="kick">Part 4</div><h1>Toolkit</h1>
+<p>The letters, numbers, spellings and signposts the test keeps using. For practice and for the last week.</p></div>
+<h2>Letters that sound alike</h2>
+<div class="tablewrap"><table class="t">
+  <tr><th>Group</th><th>How to tell them apart</th></tr>
+  <tr><td class="k">A · E · I</td><td>A rhymes with day, E with see, I with eye. Speakers often confirm: "E as in echo".</td></tr>
+  <tr><td class="k">G · J</td><td>G rhymes with see, J with day. The most confused pair in Part 1.</td></tr>
+  <tr><td class="k">B · P · V · D · T</td><td>All rhyme with see. Listen for the confirmation word.</td></tr>
+  <tr><td class="k">M · N</td><td>Very close on a recording. Expect "M for mother" or similar.</td></tr>
+  <tr><td class="k">S · F</td><td>Both begin with an "e" sound: "ess" and "eff".</td></tr>
+  <tr><td class="k">Double letters</td><td>"Double O", "double L": write two.</td></tr>
+</table></div>
+<h2>Numbers, times and dates</h2>
+<div class="tablewrap"><table class="t">
+  <tr><th>You hear</th><th>You write</th></tr>
+  <tr><td class="k">oh seven seven</td><td>077</td></tr>
+  <tr><td class="k">double five</td><td>55</td></tr>
+  <tr><td class="k">fif-TEEN / FIF-ty</td><td>15 / 50: stress on the end for -teen, on the start for -ty</td></tr>
+  <tr><td class="k">half past eleven</td><td>11.30</td></tr>
+  <tr><td class="k">quarter to three</td><td>2.45</td></tr>
+  <tr><td class="k">eight pounds fifty</td><td>8.50 (with £ printed)</td></tr>
+  <tr><td class="k">the fifth of May</td><td>5 May · May 5 · 5th May (all accepted)</td></tr>
+</table></div>
+<h2>Words people misspell in the test</h2>
+<div class="words">
+  <span>accommodation</span><span>address</span><span>appointment</span><span>beginning</span><span>business</span><span>calendar</span>
+  <span>colleague</span><span>committee</span><span>comfortable</span><span>definitely</span><span>environment</span><span>equipment</span>
+  <span>February</span><span>Wednesday</span><span>government</span><span>guarantee</span><span>library</span><span>necessary</span>
+  <span>opportunity</span><span>questionnaire</span><span>receipt</span><span>recommend</span><span>restaurant</span><span>schedule</span>
+  <span>separate</span><span>souvenir</span><span>temperature</span><span>tomorrow</span><span>vegetable</span><span>laboratory</span>
+  <span>experiment</span><span>advertisement</span><span>conference</span><span>convenient</span><span>independent</span><span>knowledge</span>
+  <span>leisure</span><span>museum</span><span>occasionally</span><span>parliament</span>
+</div>
+<p class="small faint" style="margin-top:10px">British and American spellings are both accepted: centre / center, programme / program, travelling / traveling.</p>
+<h2>Signpost words</h2>
+<div class="tablewrap"><table class="t">
+  <tr><th>Job</th><th>Words</th></tr>
+  <tr><td class="k">Sequence</td><td>first, to begin with, next, after that, a second factor, finally</td></tr>
+  <tr><td class="k">Key point</td><td>the main reason, the most important thing, above all, what I'd really stress</td></tr>
+  <tr><td class="k">Contrast</td><td>however, but, on the other hand, actually, in fact</td></tr>
+  <tr><td class="k">Correction</td><td>sorry, I mean, no wait, actually, it's been changed</td></tr>
+  <tr><td class="k">Rejection</td><td>I did consider, it used to, we won't need, that's sorted</td></tr>
+  <tr><td class="k">Agreement</td><td>exactly, agreed, me too, definitely, has to go in</td></tr>
+  <tr><td class="k">Conclusion</td><td>so, to sum up, overall, in short</td></tr>
+</table></div>
+<h2>Raw score to band</h2>
+<div class="tablewrap"><table class="t">
+  <tr><th>Correct out of 40</th><th>Band (indicative)</th></tr>
+  <tr><td class="k">39–40</td><td>9.0</td></tr><tr><td class="k">37–38</td><td>8.5</td></tr><tr><td class="k">35–36</td><td>8.0</td></tr>
+  <tr><td class="k">32–34</td><td>7.5</td></tr><tr><td class="k">30–31</td><td>7.0</td></tr><tr><td class="k">26–29</td><td>6.5</td></tr><tr><td class="k">23–25</td><td>6.0</td></tr>
+</table></div>
+<p class="small faint">The conversion varies slightly between test versions. Band 9 allows at most one mistake.</p>
+</div>
+</template>
